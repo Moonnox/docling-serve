@@ -6,7 +6,6 @@
 ARG BASE_IMAGE=quay.io/sclorg/python-312-c9s:c9s
 FROM ${BASE_IMAGE}
 
-# You can define which docling models to download:
 ARG MODELS_LIST="layout tableformer picture_classifier easyocr"
 ARG UV_SYNC_EXTRA_ARGS="--all-extras --skip=cpu"
 
@@ -29,25 +28,25 @@ RUN dnf -y install --best --nodocs --setopt=install_weak_deps=False dnf-plugins-
     rm -rf /var/cache/dnf
 
 ###############################################################################
-# 4. Tesseract data path (for docling-serve OCR)
+# 4. Tesseract data path
 ###############################################################################
 ENV TESSDATA_PREFIX=/usr/share/tesseract/tessdata/
 
 ###############################################################################
-# 5. Copy uv binaries from an external image
-#    Make sure this step is before we call "uv sync," so the 'uv' command exists.
+# 5. Copy uv binaries from external image (FIX PATHS!)
 ###############################################################################
-COPY --from=ghcr.io/astral-sh/uv:0.6.1 /uv /uvx /bin/
+# If uv is at /bin/uv & /bin/uvx in that image:
+COPY --from=ghcr.io/astral-sh/uv:0.6.1 /bin/uv /bin/uvx /bin/
+# Or /usr/local/bin/uv /usr/local/bin/uvx /bin/, etc.
 
 ###############################################################################
-# 6. Switch to non-root user, set working directory
+# 6. Switch to non-root, set working directory
 ###############################################################################
 USER 1001
 WORKDIR /opt/app-root/src
 
 ###############################################################################
 # 7. Environment Variables
-#    - Tuning for docling / Python
 ###############################################################################
 ENV OMP_NUM_THREADS=4 \
     LANG=en_US.UTF-8 \
@@ -59,35 +58,34 @@ ENV OMP_NUM_THREADS=4 \
     DOCLING_SERVE_ARTIFACTS_PATH=/opt/app-root/src/.cache/docling/models
 
 ###############################################################################
-# 8. Copy in project config: pyproject.toml, uv.lock, etc.
+# 8. Copy in project config (pyproject.toml, uv.lock, etc.)
 ###############################################################################
 COPY --chown=1001:0 pyproject.toml uv.lock README.md ./
 
 ###############################################################################
 # 9. Install Python dependencies with uv
-#    - Skipping the CPU extra so that GPU (cu124) can be used
 ###############################################################################
 RUN uv sync --frozen --no-install-project --no-dev ${UV_SYNC_EXTRA_ARGS}
 
 ###############################################################################
-# 10. Download docling models into .cache/docling/models
+# 10. Download docling models
 ###############################################################################
 RUN docling-tools models download -o "${DOCLING_SERVE_ARTIFACTS_PATH}" ${MODELS_LIST} && \
     chown -R 1001:0 /opt/app-root/src/.cache && \
     chmod -R g=u /opt/app-root/src/.cache
 
 ###############################################################################
-# 11. Copy your actual application code
+# 11. Copy your application code
 ###############################################################################
 COPY --chown=1001:0 --chmod=664 ./docling_serve ./docling_serve
 
 ###############################################################################
-# 12. (Optional) Final uv sync step if you install more dependencies
+# 12. (Optional) Final uv sync
 ###############################################################################
 RUN uv sync --frozen --no-dev ${UV_SYNC_EXTRA_ARGS}
 
 ###############################################################################
-# 13. Expose port & set default command
+# 13. Expose port & default cmd
 ###############################################################################
 EXPOSE 5001
 CMD ["docling-serve", "run"]
