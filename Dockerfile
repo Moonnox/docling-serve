@@ -10,7 +10,7 @@ FROM ${BASE_IMAGE}
 # 2. Build Arguments
 ###############################################################################
 # MODELS_LIST: which Docling models to download
-# UV_SYNC_EXTRA_ARGS: additional arguments to pass to `uv sync`
+# UV_SYNC_EXTRA_ARGS: additional arguments passed to `uv sync` (e.g. --skip=cpu)
 ARG MODELS_LIST="layout tableformer picture_classifier easyocr"
 ARG UV_SYNC_EXTRA_ARGS=""
 
@@ -36,7 +36,7 @@ RUN dnf -y install --best --nodocs --setopt=install_weak_deps=False dnf-plugins-
 ENV TESSDATA_PREFIX=/usr/share/tesseract/tessdata/
 
 ###############################################################################
-# 5. Copy uv binaries from external image
+# 5. Copy uv binaries from external image (optional)
 ###############################################################################
 COPY --from=ghcr.io/astral-sh/uv:0.6.1 /uv /uvx /bin/
 
@@ -65,7 +65,7 @@ COPY --chown=1001:0 pyproject.toml uv.lock README.md ./
 ###############################################################################
 # 9. Install Python Dependencies with uv
 ###############################################################################
-# Using --skip=cu124 (from UV_SYNC_EXTRA_ARGS) to avoid conflict with 'cpu'
+# Using --skip=cpu (passed in UV_SYNC_EXTRA_ARGS) to allow cu124 (GPU) to be installed
 RUN uv sync --frozen --no-install-project --no-dev --all-extras ${UV_SYNC_EXTRA_ARGS}
 
 ###############################################################################

@@ -1,12 +1,13 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
+    # BuildKit is optional but fine to keep
     env:
       - 'DOCKER_BUILDKIT=1'
     args:
       - 'build'
-      # Pass the build-arg to skip the cu124 extra
+      # Here we skip the CPU extra so that GPU (cu124) is installed
       - '--build-arg'
-      - 'UV_SYNC_EXTRA_ARGS=--skip=cu124'
+      - 'UV_SYNC_EXTRA_ARGS=--skip=cpu'
       - '-t'
       - 'gcr.io/$PROJECT_ID/docling-serve'
       - '.'
