@@ -31,6 +31,7 @@ COPY --from=ghcr.io/astral-sh/uv:0.6.1 /uv /uvx /bin/
 # Docling Layer
 ################################################################################
 
+
 USER 1001
 WORKDIR /opt/app-root/src
 
