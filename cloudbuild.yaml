@@ -1,5 +1,14 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/docling-serve', '.']
+    env:
+      - 'DOCKER_BUILDKIT=1'
+    args:
+      - 'build'
+      # Pass the build-arg to skip the cu124 extra
+      - '--build-arg'
+      - 'UV_SYNC_EXTRA_ARGS=--skip=cu124'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/docling-serve'
+      - '.'
 images:
   - 'gcr.io/$PROJECT_ID/docling-serve'
