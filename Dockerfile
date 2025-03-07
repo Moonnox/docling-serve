@@ -63,6 +63,7 @@ ENV OMP_NUM_THREADS=4 \
     UV_PROJECT_ENVIRONMENT=/opt/app-root \
     DOCLING_SERVE_ARTIFACTS_PATH=/opt/app-root/src/.cache/docling/models
 
+
 # Copy your pyproject, lockfile, etc. with correct ownership
 COPY --chown=1001:0 pyproject.toml uv.lock README.md ./
 
