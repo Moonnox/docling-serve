@@ -3,7 +3,7 @@ ARG BASE_IMAGE=quay.io/sclorg/python-312-c9s:c9s
 
 FROM ${BASE_IMAGE}
 
-ARG MODELS_LIST="layout tableformer picture_classifier easyocr tesserocr"
+ARG MODELS_LIST="layout tableformer picture_classifier easyocr"
 # If you're installing GPU extras for docling (or any other library),
 # set them here. If you want CPU-only, remove or change to --extra=cpu
 ARG UV_SYNC_EXTRA_ARGS="--extra=cu124"
