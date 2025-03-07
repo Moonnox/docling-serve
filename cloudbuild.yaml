@@ -1,7 +1,26 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    env:
-      - 'DOCKER_BUILDKIT=1'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/docling-serve', '.']
+    # Build the Docker image
+    args:
+      - build
+      - "--platform=linux/amd64"
+      - "--build-arg"
+      - "BASE_IMAGE=quay.io/sclorg/python-312-c9s:c9s"
+      - "--build-arg"
+      # If you do want GPU extras, keep "cu124".
+      # If you prefer CPU, you could do: UV_SYNC_EXTRA_ARGS=--extra=cpu
+      - "UV_SYNC_EXTRA_ARGS=--extra=cu124"
+      - "--file"
+      - "Dockerfile"
+      - "--tag"
+      - "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/docling-gpu:$SHORT_SHA"
+      - "."
+
+  - name: 'gcr.io/cloud-builders/docker'
+    # Push the Docker image to Artifact Registry
+    args:
+      - push
+      - "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/docling-gpu:$SHORT_SHA"
+
 images:
-  - 'gcr.io/$PROJECT_ID/docling-serve'
+  - "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/docling-gpu:$SHORT_SHA"
