@@ -66,7 +66,8 @@ RUN echo "Downloading models..." && \
     chmod -R g=u /opt/app-root/src/.cache
 
 # Copy in your docling_serve code
-COPY --chown=1001:0 --chmod=664 docling_serve ./docling_serve
+COPY docling_serve ./docling_serve
+RUN chown -R 1001:0 ./docling_serve && chmod -R 664 ./docling_serve
 
 # After docling_serve is copied, do a final sync to pick up any new deps
 RUN uv sync --frozen --no-dev ${UV_SYNC_EXTRA_ARGS}
