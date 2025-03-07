@@ -36,7 +36,9 @@ WORKDIR /opt/app-root/src
 COPY docling_serve ./docling_serve
 
 # Now we can safely chown and chmod as root
-RUN chown -R 1001:0 docling_serve && chmod -R 664 docling_serve
+RUN chown -R 1001:0 docling_serve && \
+    find docling_serve -type d -exec chmod 755 {} \; && \
+    find docling_serve -type f -exec chmod 644 {} \;
 
 ################################################################################
 # 3) Switch to user 1001 for the rest of the container
