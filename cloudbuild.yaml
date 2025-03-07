@@ -1,11 +1,20 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    env: ['DOCKER_BUILDKIT=1']
     args:
       - build
-      - --progress=plain
-      - --tag
-      - gcr.io/$PROJECT_ID/my-gpu-app
-      - .
+      - "--platform=linux/amd64"
+      - "--build-arg"
+      - "BASE_IMAGE=quay.io/sclorg/python-312-c9s:c9s"
+      - "--file"
+      - "Dockerfile"
+      - "--tag"
+      - "us-central1-docker.pkg.dev/$PROJECT_ID/my-docker-repo/docling-gpu:$SHORT_SHA"
+      - "."
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - push
+      - "us-central1-docker.pkg.dev/$PROJECT_ID/my-docker-repo/docling-gpu:$SHORT_SHA"
+
 images:
-  - 'gcr.io/$PROJECT_ID/my-gpu-app'
+  - "us-central1-docker.pkg.dev/$PROJECT_ID/my-docker-repo/docling-gpu:$SHORT_SHA"
