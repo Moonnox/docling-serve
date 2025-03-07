@@ -8,7 +8,7 @@ ARG UV_SYNC_EXTRA_ARGS=""
 ################################################################################
 # 1) Install system packages as root, including CUDA libraries
 ################################################################################
-USER 0  # Make sure we’re root here.
+USER 0
 
 ENV NVIDIA_VISIBLE_DEVICES=all \
     NVIDIA_DRIVER_CAPABILITIES=compute,utility
