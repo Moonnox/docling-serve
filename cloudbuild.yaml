@@ -1,23 +1,11 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
+    env: ['DOCKER_BUILDKIT=1']
     args:
-      - '-c'
-      - |
-        # Enable BuildKit explicitly
-        export DOCKER_BUILDKIT=1
-        
-        # Adjust the --platform if desired; e.g., linux/amd64. 
-        # If you're pushing to a multi-arch environment, you may do that here.
-        docker build --platform=linux/amd64 \
-          --build-arg BASE_IMAGE=quay.io/sclorg/python-312-c9s:c9s \
-          --file Dockerfile \
-          --tag "us-central1-docker.pkg.dev/$PROJECT_ID/my-docker-repo/docling-gpu:$SHORT_SHA" \
-          .
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - push
-      - "us-central1-docker.pkg.dev/$PROJECT_ID/my-docker-repo/docling-gpu:$SHORT_SHA"
-
+      - build
+      - --progress=plain
+      - --tag
+      - gcr.io/$PROJECT_ID/my-gpu-app
+      - .
 images:
-  - "us-central1-docker.pkg.dev/$PROJECT_ID/my-docker-repo/docling-gpu:$SHORT_SHA"
+  - 'gcr.io/$PROJECT_ID/my-gpu-app'
