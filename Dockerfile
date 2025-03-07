@@ -3,7 +3,7 @@ ARG BASE_IMAGE=quay.io/sclorg/python-312-c9s:c9s
 
 FROM ${BASE_IMAGE}
 
-ARG MODELS_LIST="layout tableformer picture_classifier easyocr"
+ARG MODELS_LIST="layout tableformer picture_classifier easyocr tesseract"
 # If you're installing GPU extras for docling (or any other library),
 # set them here. If you want CPU-only, remove or change to --extra=cpu
 ARG UV_SYNC_EXTRA_ARGS="--extra=cu124"
@@ -78,8 +78,11 @@ RUN echo "Downloading models..." && \
 # 6) If docling_serve introduced new deps, sync again
 RUN uv sync --frozen --no-dev ${UV_SYNC_EXTRA_ARGS}
 
+RUN uv sync --extra tesserocr
+RUN uv sync --extra ui
+
 # 7) Expose whichever port your app uses (Cloud Run will forward it)
 # EXPOSE 5001
 
 # 8) Final command
-CMD ["docling-serve", "run", "--host=0.0.0.0", "--port", "8080"]
+CMD ["docling-serve", "run", "--host=0.0.0.0", "--port", "8080", "--workers", "5"]
