@@ -13,14 +13,14 @@ steps:
       - "--file"
       - "Dockerfile"
       - "--tag"
-      - "us-central1-docker.pkg.dev/$PROJECT_ID/my-docker-repo/docling-gpu:$SHORT_SHA"
+      - "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/docling-gpu:$SHORT_SHA"
       - "."
 
   - name: 'gcr.io/cloud-builders/docker'
     # Push the Docker image to Artifact Registry
     args:
       - push
-      - "us-central1-docker.pkg.dev/$PROJECT_ID/my-docker-repo/docling-gpu:$SHORT_SHA"
+      - "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/docling-gpu:$SHORT_SHA"
 
 images:
-  - "us-central1-docker.pkg.dev/$PROJECT_ID/my-docker-repo/docling-gpu:$SHORT_SHA"
+  - "us-central1-docker.pkg.dev/$PROJECT_ID/cloud-run-source-deploy/docling-gpu:$SHORT_SHA"
