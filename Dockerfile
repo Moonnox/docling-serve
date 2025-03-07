@@ -67,7 +67,7 @@ ENV OMP_NUM_THREADS=4 \
 COPY --chown=1001:0 pyproject.toml uv.lock README.md ./
 
 # 4) Install docling (and your other Python deps) in editable mode, with GPU extras
-RUN uv sync --frozen --no-install-project --no-dev ${UV_SYNC_EXTRA_ARGS}
+RUN uv sync --frozen --no-dev ${UV_SYNC_EXTRA_ARGS}
 
 # 5) Download Docling models
 RUN echo "Downloading models..." && \
@@ -79,7 +79,7 @@ RUN echo "Downloading models..." && \
 RUN uv sync --frozen --no-dev ${UV_SYNC_EXTRA_ARGS}
 
 # 7) Expose whichever port your app uses (Cloud Run will forward it)
-EXPOSE 5001
+# EXPOSE 5001
 
 # 8) Final command
-CMD ["docling-serve", "run"]
+CMD ["docling-serve", "run", "--host=0.0.0.0", "--port", "8080"]
