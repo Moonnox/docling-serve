@@ -32,6 +32,7 @@ from docling.datamodel.pipeline_options import (
     RapidOcrOptions,
     TableFormerMode,
     TesseractOcrOptions,
+    granite_picture_description
 )
 from docling.document_converter import DocumentConverter, FormatOption, PdfFormatOption
 from docling_core.types.doc import ImageRefMode
@@ -354,6 +355,11 @@ def get_pdf_pipeline_opts(  # noqa: C901
     )
     pipeline_options.table_structure_options.do_cell_matching = True  # do_cell_matching
     pipeline_options.table_structure_options.mode = TableFormerMode(request.table_mode)
+    pipeline_options.do_picture_description=True
+    pipleline_options.do_code_enrichment=True
+    pipeline_options.do_formula_enrichment=True
+    pipeline_options.do_picture_classification=True
+    pipeline_options.picture_description_options = granite_picture_descriptio
 
     if request.image_export_mode != ImageRefMode.PLACEHOLDER:
         pipeline_options.generate_page_images = True
