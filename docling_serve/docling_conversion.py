@@ -373,7 +373,6 @@ def get_pdf_pipeline_opts(  # noqa: C901
         print(e)
         pipeline_options.images_scale = 2
     
-    pipeline_options.
         
     if request.pdf_backend == PdfBackend.DLPARSE_V1:
         backend: Type[PdfDocumentBackend] = DoclingParseDocumentBackend
