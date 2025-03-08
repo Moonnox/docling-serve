@@ -356,16 +356,26 @@ def get_pdf_pipeline_opts(  # noqa: C901
     pipeline_options.table_structure_options.do_cell_matching = True  # do_cell_matching
     pipeline_options.table_structure_options.mode = TableFormerMode(request.table_mode)
     pipeline_options.do_picture_description=True
-    pipleline_options.do_code_enrichment=True
+    pipeline_options.do_code_enrichment=True
     pipeline_options.do_formula_enrichment=True
     pipeline_options.do_picture_classification=True
-    pipeline_options.picture_description_options = granite_picture_descriptio
+    pipeline_options.picture_description_options = granite_picture_description
+    
+    
 
-    if request.image_export_mode != ImageRefMode.PLACEHOLDER:
-        pipeline_options.generate_page_images = True
+    # if request.image_export_mode != ImageRefMode.PLACEHOLDER:
+    #     pipeline_options.generate_page_images = True
+    #     if request.images_scale:
+    #         pipeline_options.images_scale = request.images_scale
+    try:
         if request.images_scale:
             pipeline_options.images_scale = request.images_scale
-
+    except Exception as e:
+        print(e)
+        pipeline_options.images_scale = 2
+    
+    pipeline_options.
+        
     if request.pdf_backend == PdfBackend.DLPARSE_V1:
         backend: Type[PdfDocumentBackend] = DoclingParseDocumentBackend
     elif request.pdf_backend == PdfBackend.DLPARSE_V2:
