@@ -362,6 +362,7 @@ def get_pdf_pipeline_opts(  # noqa: C901
     pipeline_options.picture_description_options = granite_picture_description
     
 
+    
     # if request.image_export_mode != ImageRefMode.PLACEHOLDER:
     #     pipeline_options.generate_page_images = True
     #     if request.images_scale:
