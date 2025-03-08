@@ -83,7 +83,7 @@ RUN uv sync --extra tesserocr
 RUN uv sync --extra ui
 
 # 7) Expose whichever port your app uses (Cloud Run will forward it)
-# EXPOSE 5001
+EXPOSE 8080
 
 # 8) Final command
 CMD ["docling-serve", "run", "--host=0.0.0.0", "--port", "8080", "--workers", "5"]
