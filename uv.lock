@@ -535,7 +535,7 @@ wheels = [
 
 [[package]]
 name = "docling-serve"
-version = "0.3.0"
+version = "0.4.0"
 source = { editable = "." }
 dependencies = [
     { name = "docling" },
@@ -544,6 +544,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "python-multipart" },
+    { name = "transformers" },
     { name = "typer" },
     { name = "uvicorn", extra = ["standard"] },
 ]
@@ -597,6 +598,7 @@ requires-dist = [
     { name = "torch", marker = "extra == 'cu124'", specifier = ">=2.6.0", index = "https://download.pytorch.org/whl/cu124", conflict = { package = "docling-serve", extra = "cu124" } },
     { name = "torchvision", marker = "extra == 'cpu'", specifier = ">=0.21.0", index = "https://download.pytorch.org/whl/cpu", conflict = { package = "docling-serve", extra = "cpu" } },
     { name = "torchvision", marker = "extra == 'cu124'", specifier = ">=0.21.0", index = "https://download.pytorch.org/whl/cu124", conflict = { package = "docling-serve", extra = "cu124" } },
+    { name = "transformers", specifier = ">=4.42.4" },
     { name = "typer", specifier = "~=0.12" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.29.0,<1.0.0" },
 ]

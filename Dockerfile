@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1.4
-ARG BASE_IMAGE=quay.io/sclorg/python-312-c9s:c9s
+# ARG BASE_IMAGE=quay.io/sclorg/python-312-c9s:c9s
+ARG BASE_IMAGE=nvidia/cuda:12.1.0-runtime-centos7
 
 FROM ${BASE_IMAGE}
 
